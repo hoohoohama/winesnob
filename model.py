@@ -39,11 +39,11 @@ def main():
 
     print('step 4: train model')
     # use RandomForestClassifier
-    tree = RandomForestClassifier(max_depth=None,
+    model = RandomForestClassifier(max_depth=None,
                                   n_estimators=100,
                                   max_features='auto')
-    tree.fit(x_train, y_train)
-    print(tree)
+    model.fit(x_train, y_train)
+    print(model)
 
     # List some parameters that we want to tune
     # hyperparameters = {
@@ -52,17 +52,17 @@ def main():
     #         min_samples_leaf=1, min_samples_split=2,
     #         min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1}
 
-    # use decision tree
-    # tree = DecisionTreeClassifier(max_depth=5)
-    # tree.fit(x_train, y_train)
+    # use decision model
+    # model = DecisionTreeClassifier(max_depth=5)
+    # model.fit(x_train, y_train)
 
     # use GradientBoostingClassifier
-    # tree = GradientBoostingClassifier(max_depth=5)
-    # tree.fit(x_train, y_train)
+    # model = GradientBoostingClassifier(max_depth=5)
+    # model.fit(x_train, y_train)
 
     # make prediction and check our results
     print('step 5: evaluate model')
-    y_pred = tree.predict(x_test)
+    y_pred = model.predict(x_test)
     performance = precision_recall_fscore_support(y_test, y_pred)
 
     # Precision, Recall, Fscore, and Support
@@ -78,7 +78,7 @@ def main():
     print('mean_squared_error: {}'.format(mean_squared_error(y_test, y_pred)))
 
     # save model to a .pkl file
-    joblib.dump(tree, 'model.pkl')
+    joblib.dump(model, 'model.pkl')
 
     # load model again from .pkl file
     tree2 = joblib.load('model.pkl')
