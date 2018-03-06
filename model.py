@@ -1,9 +1,10 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.externals import joblib
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.metrics import precision_recall_fscore_support, confusion_matrix
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
 
 
 def is_tasty(quality):
@@ -37,15 +38,15 @@ def main():
     print('train ', x_train.shape)
     print('test ', x_test.shape)
 
-    print('step 4: train model')
+    print('step 4: select and train model')
     # use RandomForestClassifier
-    model = RandomForestClassifier(max_depth=None,
-                                  n_estimators=100,
-                                  max_features='auto')
-    model.fit(x_train, y_train)
-    print(model)
+    if True:
+        model = RandomForestClassifier(max_depth=None,
+                                       n_estimators=100,
+                                       max_features='auto')
+        model.fit(x_train, y_train)
 
-    # List some parameters that we want to tune
+    # List some other parameters that we want to tune
     # hyperparameters = {
     #         max_depth=5, max_features='auto', max_leaf_nodes=None,
     #         min_impurity_decrease=0.0, min_impurity_split=None,
@@ -53,12 +54,16 @@ def main():
     #         min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1}
 
     # use decision model
-    # model = DecisionTreeClassifier(max_depth=5)
-    # model.fit(x_train, y_train)
+    if False:
+        model = DecisionTreeClassifier(max_depth=5)
+        model.fit(x_train, y_train)
 
     # use GradientBoostingClassifier
-    # model = GradientBoostingClassifier(max_depth=5)
-    # model.fit(x_train, y_train)
+    if False:
+        model = GradientBoostingClassifier(max_depth=5)
+        model.fit(x_train, y_train)
+
+    print(model)
 
     # make prediction and check our results
     print('step 5: evaluate model')
