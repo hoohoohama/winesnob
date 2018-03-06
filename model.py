@@ -15,9 +15,11 @@ def is_tasty(quality):
 
 def main():
     # load dataset
+    print('step 1: load dataset')
     df = pd.read_csv('winequality-red.csv', sep=';', quotechar='"')
 
     # perform some data transformation
+    print('step 2: cleanup data')
     df['tasty'] = df['quality'].apply(is_tasty)
     data = df[['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide',
                'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol']]
@@ -30,13 +32,18 @@ def main():
     # and use it for testing, and the other two-thirds will be used for training the classifiers. Note that we can
     # specify a random_state seed in order to get the same results for the same input data if we want to replicate
     # this experiement later.
+    print('step 3: split data into training and test sets')
     x_train, x_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=42)
+    print('train ', x_train.shape)
+    print('test ', x_test.shape)
 
+    print('step 4: train model')
     # use RandomForestClassifier
     tree = RandomForestClassifier(max_depth=None,
                                   n_estimators=100,
                                   max_features='auto')
     tree.fit(x_train, y_train)
+    print(tree)
 
     # List some parameters that we want to tune
     # hyperparameters = {
@@ -54,6 +61,7 @@ def main():
     # tree.fit(x_train, y_train)
 
     # make prediction and check our results
+    print('step 5: evaluate model')
     y_pred = tree.predict(x_test)
     performance = precision_recall_fscore_support(y_test, y_pred)
 
