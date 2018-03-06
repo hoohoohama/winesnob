@@ -30,33 +30,32 @@ def main():
     # and use it for testing, and the other two-thirds will be used for training the classifiers. Note that we can
     # specify a random_state seed in order to get the same results for the same input data if we want to replicate
     # this experiement later.
-    data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.2, random_state=123)
+    x_train, x_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=42)
 
-    # tree = DecisionTreeClassifier(max_depth=5)
-    # tree.fit(data_train, target_train)
-
-    # # use RandomForestClassifier
+    # use RandomForestClassifier
     tree = RandomForestClassifier(max_depth=None,
                                   n_estimators=100,
                                   max_features='auto')
-    tree.fit(data_train, target_train)
+    tree.fit(x_train, y_train)
 
     # List some parameters that we want to tune
-    # hyperparameters = {class_weight=None, criterion='gini',
+    # hyperparameters = {
     #         max_depth=5, max_features='auto', max_leaf_nodes=None,
     #         min_impurity_decrease=0.0, min_impurity_split=None,
     #         min_samples_leaf=1, min_samples_split=2,
-    #         min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1,
-    #         oob_score=False, random_state=None, verbose=0,
-    #         warm_start=False
+    #         min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1}
 
-    # # use GradientBoostingClassifier
+    # use decision tree
+    # tree = DecisionTreeClassifier(max_depth=5)
+    # tree.fit(x_train, y_train)
+
+    # use GradientBoostingClassifier
     # tree = GradientBoostingClassifier(max_depth=5)
-    # tree.fit(data_train, target_train)
+    # tree.fit(x_train, y_train)
 
-    # check our results
-    performance = precision_recall_fscore_support(target_test, tree.predict(data_test))
-    print(performance)
+    # make prediction and check our results
+    y_pred = tree.predict(x_test)
+    performance = precision_recall_fscore_support(y_test, y_pred)
 
     # Precision, Recall, Fscore, and Support
     print('Precision: ', performance[0])
@@ -65,11 +64,10 @@ def main():
     print('Support: ', performance[3], '\n')
 
     print('Confusion Matrix:')
-    print(confusion_matrix(target_test, tree.predict(data_test)), '\n')
+    print(confusion_matrix(y_test, y_pred), '\n')
 
-    y_pred = tree.predict(data_test)
-    print('r2_score: {}'.format(r2_score(target_test, y_pred)))
-    print('mean_squared_error: {}'.format(mean_squared_error(target_test, y_pred)))
+    print('r2_score: {}'.format(r2_score(y_test, y_pred)))
+    print('mean_squared_error: {}'.format(mean_squared_error(y_test, y_pred)))
 
     # save model to a .pkl file
     joblib.dump(tree, 'model.pkl')
@@ -77,12 +75,9 @@ def main():
     # load model again from .pkl file
     tree2 = joblib.load('model.pkl')
 
-    y_pred = tree2.predict(data_test)
-    print('r2_score: {}'.format(r2_score(target_test, y_pred)))
-    print('mean_squared_error: {}'.format(mean_squared_error(target_test, y_pred)))
-
-    print('Confusion Matrix:')
-    print(confusion_matrix(target_test, tree2.predict(data_test)), '\n')
+    y_pred = tree2.predict(x_test)
+    print('r2_score: {}'.format(r2_score(y_test, y_pred)))
+    print('mean_squared_error: {}'.format(mean_squared_error(y_test, y_pred)))
 
 
 if __name__ == '__main__':
