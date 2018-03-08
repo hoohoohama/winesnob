@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestRegressor
@@ -10,7 +11,7 @@ from sklearn.pipeline import make_pipeline
 
 def main():
     # Load red wine data.
-    data = pd.read_csv('winequality-red.csv', sep=';', quotechar='"')
+    data = pd.read_csv('./datasets/winequality-red.csv', sep=';', quotechar='"')
 
     # print the first 5 rows
     # print(data.head())
@@ -52,10 +53,14 @@ def main():
     print(mean_squared_error(y_test, y_pred))
 
     # save model to a .pkl file
-    joblib.dump(clf, 'rf_regressor.pkl')
+    directory = './output'
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    joblib.dump(clf, './output/rf_regressor.pkl')
 
     # load model again from .pkl file
-    clf2 = joblib.load('rf_regressor.pkl')
+    clf2 = joblib.load('./output/rf_regressor.pkl')
 
     # Predict data set using loaded model
     y_pred = clf2.predict(X_test)

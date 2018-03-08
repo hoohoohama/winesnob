@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.externals import joblib
@@ -17,7 +18,7 @@ def is_tasty(quality):
 def main():
     # load dataset
     print('step 1: load dataset')
-    df = pd.read_csv('winequality-red.csv', sep=';', quotechar='"')
+    df = pd.read_csv('./datasets/winequality-red.csv', sep=';', quotechar='"')
 
     # perform some data transformation
     print('step 2: cleanup data')
@@ -82,11 +83,15 @@ def main():
     print('r2_score: {}'.format(r2_score(y_test, y_pred)))
     print('mean_squared_error: {}'.format(mean_squared_error(y_test, y_pred)))
 
+    directory = './output'
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
     # save model to a .pkl file
-    joblib.dump(model, 'model.pkl')
+    joblib.dump(model, './output/model.pkl')
 
     # load model again from .pkl file
-    tree2 = joblib.load('model.pkl')
+    tree2 = joblib.load('./output/model.pkl')
 
     y_pred = tree2.predict(x_test)
     print('r2_score: {}'.format(r2_score(y_test, y_pred)))
